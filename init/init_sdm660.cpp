@@ -1,6 +1,6 @@
 /*
    Copyright (c) 2016, The CyanogenMod Project
-   Copyright (c) 2019, The LineageOS Project
+   Copyright (c) 2019-2020, The LineageOS Project
 
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions are
@@ -42,9 +42,7 @@
 #include "vendor_init.h"
 #include "property_service.h"
 
-using android::base::GetProperty;
 using android::base::ReadFileToString;
-using android::init::property_set;
 
 char const *heapstartsize;
 char const *heapgrowthlimit;
@@ -86,31 +84,42 @@ void check_device()
     }
 }
 
+void property_override(char const prop[], char const value[], bool add = true)
+{
+    auto pi = (prop_info *) __system_property_find(prop);
+
+    if (pi != nullptr) {
+        __system_property_update(pi, value, strlen(value));
+    } else if (add) {
+        __system_property_add(prop, strlen(prop), value, strlen(value));
+    }
+}
+
 void vendor_load_properties()
 {
     check_device();
 
-    property_set("dalvik.vm.heapstartsize", heapstartsize);
-    property_set("dalvik.vm.heapgrowthlimit", heapgrowthlimit);
-    property_set("dalvik.vm.heapsize", heapsize);
-    property_set("dalvik.vm.heaptargetutilization", heaptargetutilization);
-    property_set("dalvik.vm.heapminfree", heapminfree);
-    property_set("dalvik.vm.heapmaxfree", heapmaxfree);
+    property_override("dalvik.vm.heapstartsize", heapstartsize);
+    property_override("dalvik.vm.heapgrowthlimit", heapgrowthlimit);
+    property_override("dalvik.vm.heapsize", heapsize);
+    property_override("dalvik.vm.heaptargetutilization", heaptargetutilization);
+    property_override("dalvik.vm.heapminfree", heapminfree);
+    property_override("dalvik.vm.heapmaxfree", heapmaxfree);
 
     std::string hw_device;
     char const *hw_id_file = "/sys/devices/platform/HardwareInfo/hw_id";
     ReadFileToString(hw_id_file, &hw_device);
     if (hw_device.find("D9P") != std::string::npos) {
-        property_set("persist.sys.fp.vendor", "fpc");
-        property_set("ro.board.variant", "d9p");
-        property_set("ro.sf.lcd_density", "265");
-        property_set("persist.radio.multisim.config", "ssss");
-        property_set("ro.product.model", "MI PAD 4 PLUS");
+        property_override("persist.sys.fp.vendor", "fpc");
+        property_override("ro.board.variant", "d9p");
+        property_override("ro.sf.lcd_density", "265");
+        property_override("persist.radio.multisim.config", "ssss");
+        property_override("ro.product.model", "MI PAD 4 PLUS");
     } else if (hw_device.find("D9") != std::string::npos) {
-        property_set("persist.sys.fp.vendor", "none");
-        property_set("ro.board.variant", "d9");
-        property_set("ro.sf.lcd_density", "320");
-        property_set("persist.radio.multisim.config", "ssss");
-        property_set("ro.product.model", "MI PAD 4");
+        property_override("persist.sys.fp.vendor", "none");
+        property_override("ro.board.variant", "d9");
+        property_override("ro.sf.lcd_density", "320");
+        property_override("persist.radio.multisim.config", "ssss");
+        property_override("ro.product.model", "MI PAD 4");
     }
 }
