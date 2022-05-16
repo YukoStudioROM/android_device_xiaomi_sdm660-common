@@ -140,6 +140,7 @@ PRODUCT_BOOT_JARS += \
 
 # Bluetooth
 PRODUCT_PACKAGES += \
+    android.hardware.bluetooth@1.0.vendor \
     vendor.qti.hardware.btconfigstore@1.0.vendor
 
 # Camera
@@ -181,6 +182,7 @@ PRODUCT_PACKAGES += \
     android.hardware.memtrack@1.0-service \
     android.hardware.renderscript@1.0-impl \
     android.frameworks.displayservice@1.0 \
+    android.frameworks.displayservice@1.0.vendor \
     vendor.display.config@1.1
 
 # Doze
@@ -219,6 +221,10 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 
 PRODUCT_ODM_PROPERTIES += \
     ro.vendor.qti.va_odm.support=1
+
+# Gatekeeper
+PRODUCT_PACKAGES += \
+    android.hardware.gatekeeper@1.0.vendor
 
 # GPS / Location
 PRODUCT_PACKAGES += \
@@ -289,6 +295,10 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayout/uinput-fpc.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/uinput-fpc.kl \
     $(LOCAL_PATH)/keylayout/uinput-goodix.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/uinput-goodix.kl
 
+# Keystore
+PRODUCT_PACKAGES += \
+    android.hardware.keymaster@3.0.vendor
+
 # Lights
 PRODUCT_PACKAGES += \
     android.hardware.light@2.0-service.xiaomi_sdm660
@@ -307,6 +317,10 @@ PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_audio.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_telephony.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_video.xml
+
+# Net
+PRODUCT_PACKAGES += \
+    android.system.net.netd@1.1.vendor
 
 # OMX
 PRODUCT_PACKAGES += \
@@ -354,7 +368,11 @@ PRODUCT_PACKAGES += \
 
 # RIL
 PRODUCT_PACKAGES += \
+    android.hardware.radio@1.4.vendor \
+    android.hardware.radio.config@1.2.vendor \
+    android.hardware.radio.deprecated@1.0.vendor \
     android.hardware.secure_element@1.0 \
+    android.hardware.secure_element@1.0.vendor \
     rild \
     librmnetctl \
     libprotobuf-cpp-full
